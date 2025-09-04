@@ -9,7 +9,7 @@ def index():
     query = request.args.get("q", "").strip()
     if not query:
         return redirect("/search")
-    return send_file("index.html")
+    return send_file("main.html")
 
 # Route for the search page
 @app.route("/search")
