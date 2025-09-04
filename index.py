@@ -4,8 +4,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'Hello, World!'
+    return 'Haha'
 
 @app.route('/about')
 def about():
-    return 'About'
+    return 'Horse'
+
+if __name__ == "__main__":
+    app.run(port=3000, debug=True)
