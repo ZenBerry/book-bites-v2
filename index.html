@@ -1,9 +1,244 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Horse</title>
-  </head>
-  <body>
-    <h1>Force</h1>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookBites</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        .quote-box-container {
+            position: relative;
+        }
+        .quote-box {
+            max-width: 700px;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            opacity: 0; /* start invisible */
+            transition: opacity 0.5s ease;
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .quote-text {
+            font-size: 1.2rem;
+        }
+        .quote-author {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .quote-book {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        .quote-author:empty,
+        .quote-book:empty {
+            display: none;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            opacity: 0; /* start invisible */
+            transition: opacity 0.5s ease;
+        }
+        .btn-home {
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .btn-prev {
+            left: -90px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .btn-next {
+            right: -90px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Dots below the card */
+        .dots {
+            display: flex;
+            gap: 6px;
+            margin-top: 25px;
+            justify-content: center;
+            opacity: 0; /* start invisible */
+            transition: opacity 0.5s ease;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .dot.active {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-box-container">
+        <div class="quote-box">
+            <button class="btn btn-home">Home</button>
+            <button class="btn btn-prev">Prev</button>
+            <button class="btn btn-next">Next</button>
+
+            <div class="quote-text">Loading...</div>
+            <div class="quote-author"></div>
+            <div class="quote-book"></div>
+        </div>
+        <div class="dots"></div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get('q') || 'Jasper Fforde';
+        let quotes = [];
+        let index = 0;
+    
+        const quoteBox = document.querySelector('.quote-box');
+        const quoteText = document.querySelector('.quote-text');
+        const quoteAuthor = document.querySelector('.quote-author');
+        const quoteBook = document.querySelector('.quote-book');
+        const dotsContainer = document.querySelector('.dots');
+        const buttons = document.querySelectorAll('.btn');
+    
+        async function fetchQuotes() {
+            const response = await fetch(`/quotes?q=${encodeURIComponent(query)}`);
+            quotes = await response.json();
+            if (quotes.length > 0) {
+                createDots();
+                fadeInAll();
+                showQuote(true); // immediate show for first quote
+            } else {
+                quoteText.textContent = "No quotes found.";
+                fadeInAll();
+            }
+        }
+    
+        function fadeInAll() {
+            quoteBox.style.opacity = 1;
+            dotsContainer.style.opacity = 1;
+            buttons.forEach(btn => btn.style.opacity = 1);
+        }
+    
+        function showQuote(initial = false) {
+            if (quotes.length === 0) return;
+            const q = quotes[index];
+    
+            if (initial) {
+                quoteText.textContent = q.quote;
+                quoteAuthor.textContent = q.author;
+                quoteBook.textContent = q.book;
+                updateDots();
+            } else {
+                // Fade out
+                quoteBox.style.opacity = 0;
+                dotsContainer.style.opacity = 0;
+    
+                setTimeout(() => {
+                    quoteText.textContent = q.quote;
+                    quoteAuthor.textContent = q.author;
+                    quoteBook.textContent = q.book;
+                    // Fade in
+                    quoteBox.style.opacity = 1;
+                    dotsContainer.style.opacity = 1;
+                    updateDots();
+                }, 500);
+            }
+        }
+    
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            quotes.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                dot.addEventListener('click', () => {
+                    index = i;
+                    showQuote();
+                });
+                dotsContainer.appendChild(dot);
+            });
+        }
+    
+        function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+    
+        function nextQuote() {
+            if (quotes.length === 0) return;
+            index = (index + 1) % quotes.length;
+            showQuote();
+        }
+    
+        function prevQuote() {
+            if (quotes.length === 0) return;
+            index = (index - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+    
+        function goHome() {
+            // Fade out all elements
+            quoteBox.style.opacity = 0;
+            dotsContainer.style.opacity = 0;
+            buttons.forEach(btn => btn.style.opacity = 0);
+    
+            // Redirect after fade completes
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 500); // match the CSS transition duration
+        }
+    
+        // Key navigation support
+        document.addEventListener('keydown', (e) => {
+            switch(e.code) {
+                case 'Space':
+                case 'ArrowRight':
+                    e.preventDefault();
+                    nextQuote();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    prevQuote();
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    goHome();
+                    break;
+            }
+        });
+    
+        document.querySelector('.btn-next').addEventListener('click', nextQuote);
+        document.querySelector('.btn-prev').addEventListener('click', prevQuote);
+        document.querySelector('.btn-home').addEventListener('click', goHome);
+    
+        fetchQuotes();
+    </script>
+    
+</body>
 </html>
