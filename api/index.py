@@ -27,5 +27,5 @@ def get_quotes():
     results = quote(search, limit=limit)
     return jsonify(results)
 
-
-app.run(port=3000)
+if __name__ == "__main__":
+    app.run(port=3000)
