@@ -6,6 +6,7 @@ app = Flask(__name__)
 # Root route
 @app.route("/")
 def index():
+    print('ale!')   
     query = request.args.get("q", "").strip()
     if not query:
         return redirect("/search")
