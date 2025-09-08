@@ -25,7 +25,7 @@ def search_page():
 @app.route("/quotes")
 def get_quotes():
     search = request.args.get("q", "")
-    limit = int(request.args.get("limit", 21))
+    limit = int(request.args.get("limit", 11))
     if not search:
         return jsonify([])
 
@@ -50,7 +50,10 @@ def get_related():
     # 2. Fetch quotes for that related author using the existing quote() function
     quotes_for_related = quote(related_author, limit=21)
 
-    return jsonify(quotes_for_related)
+    return jsonify({
+        "related_author": related_author,
+        "quotes": quotes_for_related
+    })
 
 
 if __name__ == "__main__":

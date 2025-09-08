@@ -183,19 +183,50 @@
         }
 
         async function showRelated() {
+            if (quotes.length === 0) return;
+            const author = quotes[index].author;
+            
+            // Fade out
+            quoteBox.style.opacity = 0;
+            dotsContainer.style.opacity = 0;
+            topButtonsRow.style.opacity = 0;
+        
             try {
-                const res = await fetch(`/related?q=${encodeURIComponent(quotes[index].author)}`);
+                const res = await fetch(`/related?q=${encodeURIComponent(author)}`);
                 const data = await res.json();
+                console.log(data);
+                quotesFromData = data.quotes;
+                authorFromData = data.related_author;
                 if (data.length === 0) return;
         
-                quotes = data;
-                index = 0;
-                createDots();
-                showQuote(true);
+                setTimeout(() => {
+                    quotes = quotesFromData;
+                    index = 0;
+                    createDots();
+                    showQuote(true); // immediately show first related quote
+        
+                    // Fade in
+                    quoteBox.style.opacity = 1;
+                    dotsContainer.style.opacity = 1;
+                    topButtonsRow.style.opacity = 1;
+        
+                    // Update URL without reloading
+                    const newUrl = new URL(window.location);
+                    newUrl.searchParams.set('q', authorFromData);
+                    window.history.pushState({}, '', newUrl);
+        
+                }, 500); // match fade-out duration
             } catch (err) {
                 console.error("Error fetching related quotes:", err);
+                // Fade back in in case of error
+                setTimeout(() => {
+                    quoteBox.style.opacity = 1;
+                    dotsContainer.style.opacity = 1;
+                    topButtonsRow.style.opacity = 1;
+                }, 500);
             }
         }
+        
     
         function fadeInAll() {
             quoteBox.style.opacity = 1;
