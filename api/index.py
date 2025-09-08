@@ -20,7 +20,7 @@ def search_page():
 @app.route("/quotes")
 def get_quotes():
     search = request.args.get("q", "")
-    limit = int(request.args.get("limit", 20))
+    limit = int(request.args.get("limit", 21))
     if not search:
         return jsonify([])
 

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no">
     <title>BookBites</title>
     <style>
         body {
@@ -64,20 +65,20 @@
             align-content: center;
             align-items: center;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 7px;
         }
         .btn-home {
-            top: -60px;
+            top: -70px;
             left: 50%;
             transform: translateX(-50%);
         }
         .btn-prev {
-            left: -90px;
+            left: -120px;
             top: 50%;
             transform: translateY(-50%);
         }
         .btn-next {
-            right: -90px;
+            right: -120px;
             top: 50%;
             transform: translateY(-50%);
         }
@@ -108,20 +109,36 @@
           align-items: center;
           width: 20px;              /* set size of the square */
           height: 20px;             /* same as width */
-          border: 3px solid black;  /* border thickness and color */
-          border-radius: 6px;      /* rounded corners */
+          border: 2px solid black;  /* border thickness and color */
+          border-radius: 5px;      /* rounded corners */
           background: transparent;  /* transparent background */
-          font-size: 15px;          /* adjust as needed */
+          font-size: 12px;          /* adjust as needed */
           user-select: none;        /* optional: prevents text selection */
+          font-family: -apple-system, "system-ui", "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
+          font-weight: bold;
+        }
+        .keycap-return {
+          position: relative;
+        }
+        
+        .keycap-return::after {
+          content: "";
+          position: absolute;
+          bottom: 6px;
+          right: 6px;
+          width: 16px;
+          height: 16px;
+          background: no-repeat center/contain;
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M19 7v4H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21V7z'/></svg>");
         }
     </style>
 </head>
 <body>
     <div class="quote-box-container">
         <div class="quote-box">
-            <button class="btn btn-home">Home <div class="keycap">A</div></button>
-            <button class="btn btn-prev">Prev</button>
-            <button class="btn btn-next">Next</button>
+            <button class="btn btn-home">Home<div class="keycap">⏎</div></button>
+            <button class="btn btn-prev"><div class="keycap">←</div>Prev</button>
+            <button class="btn btn-next">Next<div class="keycap">→</div></button>
 
             <div class="quote-text">Loading...</div>
             <div class="quote-author"></div>
