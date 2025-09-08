@@ -31,8 +31,11 @@ def get_quotes():
         return jsonify([])
 
     results = quote(search, limit=limit)
+    if not results:
+        return jsonify([])
     filtered = [q for q in results if len(q.get("quote", "")) <= 300]
     selected = random.sample(filtered, min(11, len(filtered)))
+    # print(results)
     
     return jsonify(selected)
 

@@ -174,7 +174,8 @@
         fadeInAll();
         showQuote(true);
       } else {
-        quoteText.textContent = "No quotes found.";
+        console.log('hmm!');
+        quoteText.textContent = "No bites found.";
         fadeInAll();
       }
     }
@@ -197,7 +198,7 @@
             createDots();
             showQuote(true);
           } else {
-            quoteText.textContent = `No quotes found for "${term}".`;
+            quoteText.textContent = `No bites found for "${term}".`;
           }
 
           document.getElementById('loading').style.opacity = 0;
@@ -227,14 +228,30 @@
       topButtonsRow.style.opacity = 0;
       document.getElementById('loading').innerHTML = "Loading related...";
       document.getElementById('loading').style.opacity = 1;
-
+    
       try {
         const res = await fetch(`/related?q=${encodeURIComponent(author)}`);
         const data = await res.json();
-        quotesFromData = data.quotes;
-        authorFromData = data.related_author;
-        if (data.length === 0) return;
-
+        
+        // Check if related quotes or author exist
+        if (!data.quotes || data.quotes.length === 0 || !data.related_author) {
+          setTimeout(() => {
+            document.getElementById('loading').style.opacity = 0;
+            quotes = []; // clear previous quotes
+            quoteText.textContent = `No related authors found for "${author}".`;
+            quoteAuthor.textContent = '';
+            quoteBook.textContent = '';
+            dotsContainer.innerHTML = ''; // clear dots
+            quoteBox.style.opacity = 1;
+            dotsContainer.style.opacity = 1;
+            topButtonsRow.style.opacity = 1;
+          }, 500);
+          return;
+        }
+    
+        const quotesFromData = data.quotes;
+        const authorFromData = data.related_author;
+    
         setTimeout(() => {
           document.getElementById('loading').style.opacity = 0;
           quotes = quotesFromData;
@@ -244,20 +261,24 @@
           quoteBox.style.opacity = 1;
           dotsContainer.style.opacity = 1;
           topButtonsRow.style.opacity = 1;
-
+    
           const newUrl = new URL(window.location);
           newUrl.searchParams.set('q', authorFromData);
           window.history.pushState({}, '', newUrl);
         }, 500);
+    
       } catch (err) {
         console.error("Error fetching related quotes:", err);
         setTimeout(() => {
+          document.getElementById('loading').style.opacity = 0;
           quoteBox.style.opacity = 1;
           dotsContainer.style.opacity = 1;
           topButtonsRow.style.opacity = 1;
         }, 500);
       }
     }
+    
+    
 
     function fadeInAll() {
       quoteBox.style.opacity = 1;
