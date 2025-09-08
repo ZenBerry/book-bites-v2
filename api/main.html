@@ -49,6 +49,7 @@
 
         /* Buttons */
         .btn {
+            display: flex;
             padding: 10px 20px;
             border-radius: 12px;
             border: none;
@@ -59,6 +60,11 @@
             position: absolute;
             opacity: 0; /* start invisible */
             transition: opacity 0.5s ease;
+            font-family: sans-serif !important;
+            align-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
         }
         .btn-home {
             top: -60px;
@@ -96,12 +102,24 @@
         .dot.active {
             background-color: black;
         }
+        .keycap {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 20px;              /* set size of the square */
+          height: 20px;             /* same as width */
+          border: 3px solid black;  /* border thickness and color */
+          border-radius: 6px;      /* rounded corners */
+          background: transparent;  /* transparent background */
+          font-size: 15px;          /* adjust as needed */
+          user-select: none;        /* optional: prevents text selection */
+        }
     </style>
 </head>
 <body>
     <div class="quote-box-container">
         <div class="quote-box">
-            <button class="btn btn-home">Home</button>
+            <button class="btn btn-home">Home <div class="keycap">A</div></button>
             <button class="btn btn-prev">Prev</button>
             <button class="btn btn-next">Next</button>
 
