@@ -41,7 +41,7 @@ def get_related():
     # 1. Get a related author
     response = client.models.generate_content(
         model="gemma-3-27b-it",
-        contents=f"Please give me a book author who is similar to {current_author}. Just the name, nothing more, please"
+        contents=f"Please give me a book author who is similar to {current_author}. Just the name, nothing more, please."
     )
     related_author = response.text.strip()
     if not related_author:

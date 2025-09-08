@@ -147,6 +147,15 @@
           background: no-repeat center/contain;
           background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M19 7v4H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21V7z'/></svg>");
         }
+        /* Zen mode: only keep quote text visible */
+        body.zen #topButtonsRow,
+        body.zen .btn-prev,
+        body.zen .btn-next,
+        body.zen .dots {
+          opacity: 0 !important;
+        }
+        
+
     </style>
 </head>
 <body>
@@ -155,8 +164,8 @@
         <div id="topButtonsRow" style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px; gap: 20px; transition: opacity 0.5s ease;">
           <button id="btn-home" class="btn btn-top-row">Home<div class="keycap">⏎</div></button>
           <button class="btn btn-top-row">Zen<div class="keycap">Z</div></button>
-          <button class="btn btn-top-row">Save<div class="keycap">S</div></button>
-          <button id="btn-related" class="btn btn-top-row">Related<div class="keycap">R</div></button>
+          <!-- <button class="btn btn-top-row">Save<div class="keycap">S</div></button> -->
+          <button id="btn-related" class="btn btn-top-row">More<div class="keycap">M</div></button>
         </div>
         <div class="quote-box">
             
@@ -172,6 +181,7 @@
 
     <script>
         console.log('v 2.4');
+        let zenMode = false;
         const params = new URLSearchParams(window.location.search);
         const query = params.get('q') || 'Jasper Fforde';
         let quotes = [];
@@ -353,10 +363,12 @@
                     e.preventDefault();
                     goHome();
                     break;
-                case 'KeyR':
-                    e.preventDefault();
-                    showRelated();
-                    break;
+                case 'KeyM':
+                    if (!e.metaKey && !e.ctrlKey) {
+                      e.preventDefault();
+                      showRelated();
+                      break;
+                    }
             }
         });
     
@@ -367,6 +379,20 @@
 
         // document.getElementById('loading').style.opacity = 1;
         fetchQuotes();
+        function toggleZen() {
+            zenMode = !zenMode;
+            document.body.classList.toggle('zen', zenMode);
+        }
+        
+        document.querySelector('#topButtonsRow button:nth-child(2)').addEventListener('click', toggleZen);
+        
+        // Add keyboard shortcut
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'KeyZ' && !e.metaKey && !e.ctrlKey) {
+                e.preventDefault();
+                toggleZen();
+            }
+        });
     </script>
     
 </body>
