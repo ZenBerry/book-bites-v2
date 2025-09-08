@@ -67,10 +67,11 @@
             flex-wrap: wrap;
             gap: 7px;
         }
-        .btn-home {
-            top: -70px;
+        .btn-top-row {
+            /* top: -70px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%); */
+            position: relative;
         }
         .btn-prev {
             left: -120px;
@@ -135,8 +136,14 @@
 </head>
 <body>
     <div class="quote-box-container">
+        <div id="topButtonsRow" style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px; gap: 20px; transition: opacity 0.5s ease;">
+          <button id="btn-home" class="btn btn-top-row">Home<div class="keycap">⏎</div></button>
+          <button class="btn btn-top-row">Zen<div class="keycap">Z</div></button>
+          <button class="btn btn-top-row">Save<div class="keycap">S</div></button>
+          <button class="btn btn-top-row">Related<div class="keycap">R</div></button>
+        </div>
         <div class="quote-box">
-            <button class="btn btn-home">Home<div class="keycap">⏎</div></button>
+            
             <button class="btn btn-prev"><div class="keycap">←</div>Prev</button>
             <button class="btn btn-next">Next<div class="keycap">→</div></button>
 
@@ -148,13 +155,14 @@
     </div>
 
     <script>
-        console.log('v 2.1');
+        console.log('v 2.4');
         const params = new URLSearchParams(window.location.search);
         const query = params.get('q') || 'Jasper Fforde';
         let quotes = [];
         let index = 0;
     
         const quoteBox = document.querySelector('.quote-box');
+        const topButtonsRow = document.querySelector('#topButtonsRow');
         const quoteText = document.querySelector('.quote-text');
         const quoteAuthor = document.querySelector('.quote-author');
         const quoteBook = document.querySelector('.quote-book');
@@ -177,6 +185,7 @@
         function fadeInAll() {
             quoteBox.style.opacity = 1;
             dotsContainer.style.opacity = 1;
+            topButtonsRow.style.opacity = 1;
             buttons.forEach(btn => btn.style.opacity = 1);
         }
     
@@ -193,6 +202,7 @@
                 // Fade out
                 quoteBox.style.opacity = 0;
                 dotsContainer.style.opacity = 0;
+                topButtonsRow.style.opacity = 0;
     
                 setTimeout(() => {
                     quoteText.textContent = q.quote;
@@ -201,6 +211,7 @@
                     // Fade in
                     quoteBox.style.opacity = 1;
                     dotsContainer.style.opacity = 1;
+                    topButtonsRow.style.opacity = 1;
                     updateDots();
                 }, 500);
             }
@@ -271,7 +282,7 @@
     
         document.querySelector('.btn-next').addEventListener('click', nextQuote);
         document.querySelector('.btn-prev').addEventListener('click', prevQuote);
-        document.querySelector('.btn-home').addEventListener('click', goHome);
+        document.querySelector('#btn-home').addEventListener('click', goHome);
     
         fetchQuotes();
     </script>
