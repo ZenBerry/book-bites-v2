@@ -48,7 +48,7 @@ def get_related():
         return jsonify([])
 
     # 2. Fetch quotes for that related author using the existing quote() function
-    quotes_for_related = quote(related_author, limit=21)
+    quotes_for_related = quote(related_author, limit=11)
 
     return jsonify({
         "related_author": related_author,
