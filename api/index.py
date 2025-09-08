@@ -1,7 +1,12 @@
 from flask import Flask, request, jsonify, send_file, redirect
 from quote import quote 
+from google import genai
 
 app = Flask(__name__)
+
+
+client = genai.Client(api_key="AIzaSyCO4CaWfuolgFco93vdGbYEjqOf9CcqXws")
+
 
 # Root route
 @app.route("/")
@@ -26,6 +31,27 @@ def get_quotes():
 
     results = quote(search, limit=limit)
     return jsonify(results)
+
+@app.route("/related")
+def get_related():
+    current_author = request.args.get("q", "")
+    if not current_author:
+        return jsonify([])
+
+    # 1. Get a related author
+    response = client.models.generate_content(
+        model="gemma-3-27b-it",
+        contents=f"Please give me a book author who is similar to {current_author}. Just the name, nothing more, please"
+    )
+    related_author = response.text.strip()
+    if not related_author:
+        return jsonify([])
+
+    # 2. Fetch quotes for that related author using the existing quote() function
+    quotes_for_related = quote(related_author, limit=21)
+
+    return jsonify(quotes_for_related)
+
 
 if __name__ == "__main__":
     app.run(port=3000)

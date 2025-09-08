@@ -140,7 +140,7 @@
           <button id="btn-home" class="btn btn-top-row">Home<div class="keycap">⏎</div></button>
           <button class="btn btn-top-row">Zen<div class="keycap">Z</div></button>
           <button class="btn btn-top-row">Save<div class="keycap">S</div></button>
-          <button class="btn btn-top-row">Related<div class="keycap">R</div></button>
+          <button id="btn-related" class="btn btn-top-row">Related<div class="keycap">R</div></button>
         </div>
         <div class="quote-box">
             
@@ -179,6 +179,21 @@
             } else {
                 quoteText.textContent = "No quotes found.";
                 fadeInAll();
+            }
+        }
+
+        async function showRelated() {
+            try {
+                const res = await fetch(`/related?q=${encodeURIComponent(quotes[index].author)}`);
+                const data = await res.json();
+                if (data.length === 0) return;
+        
+                quotes = data;
+                index = 0;
+                createDots();
+                showQuote(true);
+            } catch (err) {
+                console.error("Error fetching related quotes:", err);
             }
         }
     
@@ -277,12 +292,18 @@
                     e.preventDefault();
                     goHome();
                     break;
+                case 'KeyR':
+                    e.preventDefault();
+                    showRelated();
+                    break;
             }
         });
     
         document.querySelector('.btn-next').addEventListener('click', nextQuote);
         document.querySelector('.btn-prev').addEventListener('click', prevQuote);
         document.querySelector('#btn-home').addEventListener('click', goHome);
+        document.querySelector('#btn-related').addEventListener('click', showRelated);
+
     
         fetchQuotes();
     </script>
