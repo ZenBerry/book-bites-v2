@@ -5,70 +5,74 @@
     <title>BookBites Search</title>
     <link type="image/x-icon" rel="icon" href="https://res.cloudinary.com/zenberry/image/upload/v1757344905/favicons/result_h4jnwm.png">
     <style>
+        @font-face {
+          font-family: "SF Pro";
+          src: url("https://res.cloudinary.com/zenberry/raw/upload/v1757343891/fonts/SF-Pro.ttf");
+        }
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          font-family: sans-serif;
+          background-color: #f5f5f5;
+          margin: 0;
         }
         .search-box {
-            display: flex;
-            align-items: center;
-            background: white;
-            padding: 20px 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            gap: 10px;
-            opacity: 0; /* start invisible */
-            transition: opacity 0.5s ease; /* smooth fade */
+          display: flex;
+          align-items: center;
+          background: white;
+          padding: 20px 30px;
+          border-radius: 12px;
+          box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+          gap: 10px;
+          opacity: 0; /* start invisible */
+          transition: opacity 0.5s ease; /* smooth fade */
         }
         input {
-            flex: 1;
-            height: 50px;
-            font-size: 1rem;
-            padding: 0 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            outline: none; /* removes the default blue outline */
-            box-shadow: none; /* removes any shadow that may appear */
-        }
+          flex: 1;
+          height: 50px;
+          font-size: 1rem;
+          padding: 0 10px;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+          outline: none; /* removes the default blue outline */
+          box-shadow: none; /* removes any shadow that may appear */
+      }
         button {
-            height: 52px;
-            padding: 0 20px;
-            font-size: 1rem;
-            border-radius: 6px;
-            border: none;
-            background-color: #4CAF50;
-            color: rgb(255, 255, 255);
-            cursor: pointer;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
+          height: 52px;
+          padding: 0 20px;
+          font-size: 1rem;
+          border-radius: 6px;
+          border: none;
+          background-color: #4CAF50;
+          color: rgb(255, 255, 255);
+          cursor: pointer;
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          align-items: center;
         }
         button:hover {
-            background-color: #45a049;
+          background-color: #45a049;
         }
         .btn {
-            display: flex;
-            padding: 10px 20px;
-            border-radius: 12px;
-            border: none;
-            background: white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            font-weight: bold;
-            cursor: pointer;
-            position: absolute;
-            opacity: 0; /* start invisible */
-            transition: opacity 0.5s ease;
-            font-family: sans-serif !important;
-            align-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 7px;
+          display: flex;
+          padding: 10px 20px;
+          border-radius: 12px;
+          border: none;
+          background: white;
+          box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+          font-weight: bold;
+          cursor: pointer;
+          position: absolute;
+          opacity: 0; /* start invisible */
+          transition: opacity 0.5s ease;
+          font-family: sans-serif !important;
+          align-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 7px;
         }
         .keycap {
           display: flex;
@@ -81,7 +85,7 @@
           background: transparent;  /* transparent background */
           font-size: 12px;          /* adjust as needed */
           user-select: none;        /* optional: prevents text selection */
-          font-family: -apple-system, "system-ui", "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
+          font-family: "SF Pro";
           font-weight: bold;
         }
         .keycap-return {
