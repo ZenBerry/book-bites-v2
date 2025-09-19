@@ -7,7 +7,11 @@ import os
 print('LIST LIST')
 print(os.listdir('.'))
 
-from Zlibrary import Zlibrary
+if 'Zlibrary.py' in os.listdir('.'):
+    from Zlibrary import Zlibrary
+else:
+    sys.path.append('./api')
+    from Zlibrary import Zlibrary
 
 from io import BytesIO
 
