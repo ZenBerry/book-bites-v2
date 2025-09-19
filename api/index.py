@@ -3,6 +3,10 @@ from quote import quote
 from google import genai
 import random
 
+import os
+print('LIST LIST')
+print(os.listdir('.'))
+
 from Zlibrary import Zlibrary
 
 from io import BytesIO
