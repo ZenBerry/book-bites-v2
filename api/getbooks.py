@@ -7,7 +7,7 @@ results = Z.search(message='The Great Gatsby', extensions='epub')
 
 # info = Z.getBookInfo(bookid= results[0]["id"])
 
-print(results['books'][0])
+print(Z.getBookInfo(bookid=results['books'][0]["id"], hashid=results['books'][0]["hash"]))
 
 
 # # Get most popular books

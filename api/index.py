@@ -3,6 +3,14 @@ from quote import quote
 from google import genai
 import random
 
+from Zlibrary import Zlibrary
+
+from io import BytesIO
+
+
+# Create Zlibrary object and login
+Z = Zlibrary(email="zenberry.music@gmail.com", password="zlibPass8")
+
 app = Flask(__name__)
 
 
@@ -16,6 +24,37 @@ def index():
     if not query:
         return redirect("/search")
     return send_file("main.html")
+
+@app.route("/read")
+def reader():
+    return send_file("reader.html")
+
+@app.route("/epub")
+def get_epub():
+    query = request.args.get("q", "").strip()
+    if not query:
+        return jsonify({"error": "No query provided"}), 400
+
+    # Search for EPUB books
+    results = Z.search(message=query, extensions='epub')
+    if not results.get('books'):
+        return jsonify({"error": "No books found"}), 404
+
+    # Download first book as bytes
+    book_info = results['books'][0]
+    book_bytes = Z.downloadBook(book_info)[1]  # Assuming this returns bytes
+    print(type(book_bytes), book_bytes)
+
+    if not book_bytes:
+        return jsonify({"error": "Failed to download book"}), 500
+
+    # Send EPUB to client as a file-like object
+    return send_file(
+        BytesIO(book_bytes),
+        mimetype='application/epub+zip',
+        download_name=f"{book_info['title']}.epub",
+        as_attachment=True
+    )
 
 # Route for the search page
 @app.route("/search")
