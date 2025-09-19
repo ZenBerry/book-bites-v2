@@ -4,13 +4,16 @@ from google import genai
 import random
 
 import os
+import sys
 print('LIST LIST')
 print(os.listdir('.'))
+
 
 if 'Zlibrary.py' in os.listdir('.'):
     from Zlibrary import Zlibrary
 else:
-    from api.Zlibrary import Zlibrary
+    sys.path.append('./api')
+    from Zlibrary import Zlibrary
 
 from io import BytesIO
 
